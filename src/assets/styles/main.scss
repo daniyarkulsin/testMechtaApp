@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+.wrapper {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 15px 15px;
+}
+a,
+button {
+  cursor: pointer;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  text-transform: none;
+}
+input[type="radio"] {
+  appearance: none; /* Отключение стандартного вида в современных браузерах */
+  -webkit-appearance: none; /* Отключение для WebKit-браузеров */
+  -moz-appearance: none; /* Отключение для Mozilla */
+}
