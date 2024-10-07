@@ -4,15 +4,15 @@
       <img :src="product.image" alt="#" />
     </div>
     <div class="card__info">
-      <h3 class="card__info-title">{{ product.title }}</h3>
-      <div class="card__info-stars">
+      <h3 class="card__info--title">{{ product.title }}</h3>
+      <div class="card__info--stars">
         <img
           v-for="(_, idx) of 5"
           src="../assets/img/icons/star.svg"
           alt="#"
           :key="idx"
         />
-        <span class="card__info-reviews">{{ product.rating }} отзывов</span>
+        <span class="card__info--reviews">{{ product.rating }} отзывов</span>
       </div>
     </div>
     <div class="price">
@@ -74,20 +74,20 @@ const goToProduct = () => {
 
   &__info {
     margin-bottom: 2vh;
-    &-title {
+    &--title {
       font-weight: normal;
       font-size: clamp(12px, 2vw, 14px);
       margin-bottom: 8px;
     }
 
-    &-stars {
+    &--stars {
       & img {
         width: clamp(9px, 2vw, 12px);
         margin-right: clamp(2px, 0.5vw, 4px);
       }
     }
 
-    &-reviews {
+    &--reviews {
       font-size: clamp(11px, 2vw, 14px);
       color: #5c5c5c;
     }
