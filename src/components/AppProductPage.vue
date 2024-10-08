@@ -3,6 +3,8 @@
   <div class="error" v-if="!loading && contentError"><p>Ошибка 404</p></div>
 
   <div class="wrapper" v-if="!loading && !contentError">
+    <RouterLink to="/">На главную</RouterLink>
+
     <div class="container">
       <!-- Content -->
       <div class="content">

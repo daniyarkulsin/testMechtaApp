@@ -10,38 +10,26 @@
         :product="product"
       />
     </div>
+    <div ref="loadTrigger" class="load-trigger"></div>
   </main>
 </template>
 <script setup lang="ts">
 import AppFilter from "@/components/AppFilter.vue";
 import AppCard from "@/components/AppCard.vue";
 import type Product from "@/types/Product";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, onBeforeUnmount, ref, watch } from "vue";
 
 const loading = ref<boolean>(true);
 const error = ref<string | null>(null);
 const products = ref<Product[]>([]);
 const activeBnt = ref<string>("");
+const page = ref<number>(1);
+const loadTrigger = ref(null);
 
-const getActiveBtn = (value: string): void => {
-  activeBnt.value = value;
-};
-
-const fetchProducts = async () => {
-  try {
-    const response = await fetch(
-      "https://665801795c36170526468b7c.mockapi.io/api/v1/products"
-    );
-    if (!response.ok) {
-      throw new Error("Ошибка сети");
-    }
-    const data = await response.json();
-    products.value = data;
-  } catch (err: any) {
-    error.value = "Ошибка при загрузке данных: " + err.message;
-  } finally {
-    loading.value = false;
-  }
+const getActiveBtn = (text: string): void => {
+  activeBnt.value = text;
+  console.log(activeBnt.value);
+  console.log(products.value);
 };
 
 watch(activeBnt, () => {
@@ -61,7 +49,59 @@ watch(activeBnt, () => {
   }
 });
 
-onMounted(fetchProducts);
+const fetchProducts = async () => {
+  try {
+    const response = await fetch(
+      `https://665801795c36170526468b7c.mockapi.io/api/v1/products?page=${page.value}&limit=20`
+    );
+    if (!response.ok) {
+      throw new Error("Ошибка сети");
+    }
+    const data = await response.json();
+    products.value = [...products.value, ...data];
+    if (data.length === 0) {
+      observer.disconnect();
+    }
+    page.value++;
+  } catch (err: any) {
+    error.value = "Ошибка при загрузке данных: " + err.message;
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Функция для подгрузки товаров
+// const loadMoreProducts = async () => {
+//   const response = await fetch(
+//     `https://665801795c36170526468b7c.mockapi.io/api/v1/products?page=${page.value}$limit=20`
+//   );
+//   const newProducts = await response.json();
+//   products.value.push(...newProducts);
+//   page.value++;
+// };
+
+// Intersection Observer для отслеживания элемента loadTrigger
+let observer: any = null;
+const initIntersectionObserver = () => {
+  observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      fetchProducts(); // Загружаем товары при попадании триггера в зону видимости
+      console.log("load");
+    }
+  });
+  observer.observe(loadTrigger.value);
+};
+
+onMounted(() => {
+  initIntersectionObserver();
+});
+
+onBeforeUnmount(() => {
+  if (observer) {
+    observer.disconnect(); // Отсоединяем наблюдатель при уничтожении компонента
+    console.log("disconnect");
+  }
+});
 </script>
 <style scoped lang="scss">
 .home {

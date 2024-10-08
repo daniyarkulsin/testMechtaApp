@@ -35,7 +35,7 @@ const emit = defineEmits(["inputText"]);
   justify-content: center;
   min-height: clamp(60px, 10vw, 80px);
   background-color: #2667ff;
-  margin-bottom: 24px;
+  margin-bottom: 1vh;
   padding: 0 10px;
 
   &__logo {
