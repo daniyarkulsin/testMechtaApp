@@ -4,7 +4,7 @@
     <div class="header__input">
       <input
         class="header__input-inner"
-        v-model="inputText"
+        v-model="store.inputText"
         placeholder="Поиск товара"
       />
       <button>
@@ -15,18 +15,16 @@
       <a href="#">
         <img src="../assets/img/icons/heart.svg" alt="heart icon" />
       </a>
-      <a href="#">
+      <RouterLink to="/test">
         <img src="../assets/img/icons/cart.svg" alt="cart icon" />
-      </a>
+      </RouterLink>
     </div>
   </header>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { useInputTextStore } from "@/stores/inputText";
 
-const inputText = ref<string>("");
-
-const emit = defineEmits(["inputText"]);
+const store = useInputTextStore();
 </script>
 <style scoped lang="scss">
 .header {

@@ -5,7 +5,7 @@
     <h2 class="error" v-if="error">Error</h2>
     <div v-if="!loading" class="home">
       <AppCard
-        v-for="product in products"
+        v-for="product in filteredItems"
         :key="product.id"
         :product="product"
       />
@@ -13,18 +13,27 @@
     <div ref="loadTrigger" class="load-trigger"></div>
   </main>
 </template>
+
 <script setup lang="ts">
 import AppFilter from "@/components/AppFilter.vue";
 import AppCard from "@/components/AppCard.vue";
+import { onMounted, onBeforeUnmount, ref, watch, computed } from "vue";
 import type Product from "@/types/Product";
-import { onMounted, onBeforeUnmount, ref, watch } from "vue";
+import { useInputTextStore } from "@/stores/inputText";
 
 const loading = ref<boolean>(true);
 const error = ref<string | null>(null);
 const products = ref<Product[]>([]);
 const activeBnt = ref<string>("");
 const page = ref<number>(1);
-const loadTrigger = ref(null);
+const loadTrigger = ref<null>(null);
+const store = useInputTextStore();
+
+const filteredItems = computed(() => {
+  return products.value.filter((product) => {
+    return product.title.toLowerCase().includes(store.inputText.toLowerCase());
+  });
+});
 
 const getActiveBtn = (text: string): void => {
   activeBnt.value = text;
@@ -115,5 +124,10 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: center;
   margin-top: 20vh;
+}
+.load-trigger {
+  height: 30px;
+  width: 100%;
+  background-color: #af1717;
 }
 </style>
